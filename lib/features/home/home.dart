@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_app_lab/features/home/widgets/custom_search_bar.dart';
 import 'package:food_app_lab/features/home/widgets/section_header.dart';
-import '../../models/category_filter_model.dart' ;
 import '../../models/meal_model.dart' ;
 import 'widgets/category_items_view.dart';
 import 'widgets/restaurants_items_view.dart';

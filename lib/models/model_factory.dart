@@ -16,7 +16,7 @@ class ModelFactory {
       case CategoryFilterModel:
         return CategoryFilterModel().fromJson(json) as T;
       default:
-        throw Exception("Model type $T is not supported");
+        throw Exception("");
     }
   }
 }

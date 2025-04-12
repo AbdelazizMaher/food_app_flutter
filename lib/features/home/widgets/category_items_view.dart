@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_app_lab/models/meal_model.dart';
 
-import '../../../models/category_filter_model.dart';
 import '../../../models/category_model.dart';
 import '../../../services/network_service.dart';
 import 'category_item.dart';
@@ -17,6 +16,8 @@ class CategoryListView extends StatefulWidget {
 class _CategoryListViewState extends State<CategoryListView> {
   late Future<List<Categories>?>? categories;
   late Future<List<MealDetails>?>? meals;
+  String selectedCategory = "Beef";
+
 
   @override
   void initState() {
@@ -30,15 +31,17 @@ class _CategoryListViewState extends State<CategoryListView> {
         builder: (context, snapshot){
             if (snapshot.hasData) {
               return Container(
-                height: 100,
+                height: 120,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: snapshot.data?.length,
                     itemBuilder: (context, index) {
-                      return CategoryItem(category: snapshot.data![index], onTap: () {
-                        meals = MealsService.getMealsByCategory(snapshot.data![index].strCategory ?? "");
+                      final category = snapshot.data![index];
+                      return CategoryItem(category: category, onTap: () {
+                        setState(() {selectedCategory = category.strCategory ?? "Beef";});
+                        meals = MealsService.getMealsByCategory(snapshot.data![index].strCategory ?? "Beef");
                         widget.onCategorySelected(meals);
-                      });
+                      }, isSelected: selectedCategory == category.strCategory,);
                     }),
               );
             } else {

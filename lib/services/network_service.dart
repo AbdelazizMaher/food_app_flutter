@@ -18,9 +18,7 @@ class MealsService {
       if (response.statusCode != 200) {
         throw Exception("Failed to load categories");
       } else {
-        return CategoryModel
-            .fromJson(response.data)
-            .categories;
+        return CategoryModel.fromJson(response.data).categories;
       }
     } catch (e) {
       return [];

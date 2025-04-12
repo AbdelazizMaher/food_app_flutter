@@ -2,27 +2,33 @@
 import 'package:flutter/material.dart';
 
 import '../../../models/meal_model.dart' ;
+import '../../../services/network_service.dart';
 import '../../details/details.dart';
 import 'special_offer_item.dart';
 
 
 class SpecialOfferListView extends StatefulWidget {
-  final Future<List<MealDetails>?>? selectedMeals;
-  const SpecialOfferListView({super.key, required this.selectedMeals});
+  Future<List<MealDetails>?>? selectedMeals;
+  SpecialOfferListView({super.key, required this.selectedMeals});
 
   @override
   State<SpecialOfferListView> createState() => _SpecialOfferListViewState();
 }
 
 class _SpecialOfferListViewState extends State<SpecialOfferListView> {
-  late Future<List<MealDetails>?>? meals;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.selectedMeals = MealsService.getMealsByCategory("Beef");
+  }
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(future: widget.selectedMeals,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Container(
-              height: 200,
+              height: 150,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: snapshot.data?.length,

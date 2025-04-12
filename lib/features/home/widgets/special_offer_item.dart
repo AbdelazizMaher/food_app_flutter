@@ -1,9 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:food_app_lab/models/meal_model.dart';
 
-import '../../../models/category_filter_model.dart';
+import '../../../services/network_service.dart';
 
-class SpecialOfferItem extends StatelessWidget {
+class SpecialOfferItem extends StatefulWidget {
   final MealDetails meals;
   final double rating;
   final String deliveryInfo;
@@ -19,15 +21,27 @@ class SpecialOfferItem extends StatelessWidget {
   });
 
   @override
+  State<SpecialOfferItem> createState() => _SpecialOfferItemState();
+}
+
+class _SpecialOfferItemState extends State<SpecialOfferItem> {
+  late Color _color;
+
+  @override
+  void initState() {
+    super.initState();
+    _color = getRandomColor();
+  }
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Container(
-        width: 300,
+        width: 320,
         margin: const EdgeInsets.only(right: 16),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: const Color(0xFFFF6B4D),
+          color: _color,
           borderRadius: BorderRadius.circular(24),
         ),
         child: Row(
@@ -35,31 +49,31 @@ class SpecialOfferItem extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: Image.network(
-                meals.strMealThumb ?? "",
+                widget.meals.strMealThumb ?? "",
                 width: 100,
                 height: 100,
-                fit: BoxFit.cover,
+                fit: BoxFit.scaleDown,
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 24),
 
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Rating
                   Row(
                     children: [
                       const Icon(Icons.star, color: Colors.yellow, size: 16),
                       const SizedBox(width: 4),
-                      Text(rating.toString(),
+                      Text(widget.rating.toString(),
                           style: const TextStyle(color: Colors.white)),
                     ],
                   ),
                   const SizedBox(height: 4),
 
                   Text(
-                    meals.strMeal ?? "",
+                    widget.meals.strMeal ?? "",
+                    maxLines: 1,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -72,7 +86,7 @@ class SpecialOfferItem extends StatelessWidget {
                       const Icon(Icons.delivery_dining,
                           color: Colors.white, size: 16),
                       const SizedBox(width: 4),
-                      Text(deliveryInfo,
+                      Text(widget.deliveryInfo,
                           style: const TextStyle(
                               fontSize: 14, color: Colors.white)),
                     ],
@@ -95,12 +109,12 @@ class SpecialOfferItem extends StatelessWidget {
                         child: const Text(
                           "Buy Now",
                           style: TextStyle(
-                            color: Color(0xFFFF6B4D),
+                            color: Colors.white,
                           ),
                         ),
                       ),
                       Text(
-                        "\$${price.toStringAsFixed(2)}",
+                        "\$${widget.price.toStringAsFixed(2)}",
                         style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -115,5 +129,16 @@ class SpecialOfferItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color getRandomColor() {
+    final List<Color> colors = [
+      Color(0xFFFF6B4D),
+      Color(0xFF4D91FF),
+      Color(0xFF50C878),
+      Color(0xFFFFA500),
+      Color(0xFF8A2BE2),
+    ];
+    return colors[Random().nextInt(colors.length)];
   }
 }

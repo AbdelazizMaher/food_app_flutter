@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:food_app_lab/features/details/widgets/AddToBasket.dart';
 import 'package:food_app_lab/features/details/widgets/ToppingSelection.dart';
+import 'package:food_app_lab/features/details/widgets/expandable_text.dart';
 import 'package:food_app_lab/features/details/widgets/info_icon_text.dart';
+import 'package:food_app_lab/features/details/widgets/video_player.dart';
 
 import '../../models/meal_model.dart';
 import '../../services/network_service.dart';
@@ -84,7 +86,6 @@ class _DetailsState extends State<Details> {
                     ),
                   ),
                 ),
-
                 SliverPadding(
                   padding: const EdgeInsets.all(16),
                   sliver: SliverToBoxAdapter(
@@ -110,7 +111,6 @@ class _DetailsState extends State<Details> {
                     ),
                   ),
                 ),
-
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   sliver: SliverToBoxAdapter(
@@ -126,25 +126,25 @@ class _DetailsState extends State<Details> {
                     ),
                   ),
                 ),
-
                 SliverPadding(
                   padding: const EdgeInsets.all(16),
                   sliver: SliverToBoxAdapter(
-                    child: Text(
-                      snapshot.data![0].strInstructions ?? "",
-                      style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
+                    child: ExpandableText(
+                      text: snapshot.data![0].strInstructions ?? "",
+                      trimLines: 3,
                     ),
                   ),
                 ),
-
+                SliverPadding(
+                  padding: const EdgeInsets.all(16),
+                  sliver: SliverToBoxAdapter(
+                    child: YoutubeVideoPlayer(videoUrl: snapshot.data![0].strYoutube ?? "")
+                  )
+                ),
                 SliverToBoxAdapter(
                   child: ToppingsSelection(
                     ingredients: snapshot.data![0].getIngredientsList().take(10).toList()),
                 ),
-
                 SliverToBoxAdapter(child: AddToBasketWidget()),
               ],
             ),
