@@ -32,6 +32,13 @@ class Assets {
   static const String imagesSplashUp = 'assets/images/splash_up.png';
   static const String imagesStar = 'assets/images/star.png';
   static const String imagesTruck = 'assets/images/truck.png';
+  static const String riveButton = 'assets/rive/button.riv';
+  static const String riveCheck = 'assets/rive/check.riv';
+  static const String riveConfetti = 'assets/rive/confetti.riv';
+  static const String riveHouse = 'assets/rive/house.riv';
+  static const String riveIcons = 'assets/rive/icons.riv';
+  static const String riveMenuButton = 'assets/rive/menu_button.riv';
+  static const String riveShapes = 'assets/rive/shapes.riv';
   static const String translationsAr = 'assets/translations/ar.json';
   static const String translationsEn = 'assets/translations/en.json';
 

@@ -11,6 +11,9 @@ class OnBoarding01 extends StatelessWidget {
   void _navigateToSignUp(BuildContext context) {
     Navigator.pushNamed(context, AppRoutes.signup);
   }
+  void _navigateToSignIn(BuildContext context) {
+    Navigator.pushNamed(context, AppRoutes.login);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +47,7 @@ class OnBoarding01 extends StatelessWidget {
             ),
             AuthButtons(
               onSignUp: () => _navigateToSignUp(context),
-              onLogin: () => (){},
+              onLogin: () => _navigateToSignIn(context),
             ),
           ]
         )

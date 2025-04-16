@@ -1,19 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:food_app_lab/features/authentication/widgets/AuthConfirmation.dart';
 import 'package:food_app_lab/features/authentication/widgets/AuthHeader.dart';
-import 'package:food_app_lab/features/home/home.dart';
 
 import '../../utils/navigation/app_routes.dart';
-import '../details/details.dart';
 
-class SignUp extends StatelessWidget {
+class SignUp extends StatefulWidget {
   const SignUp({super.key});
+
+  @override
+  State<SignUp> createState() => _SignUpState();
+}
+
+class _SignUpState extends State<SignUp> {
+  String _name = '';
+  String _email = '';
+  String _password = '';
+
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+
+  void _saveUserData() async {
+    if (_name.isEmpty || _email.isEmpty || _password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please fill all fields')));
+      return;
+    }
+
+    if (!_email.contains('@')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please enter a valid email')));
+      return;
+    }
+
+    await _storage.write(key: 'name', value: _name);
+    await _storage.write(key: 'email', value: _email);
+    await _storage.write(key: 'password', value: _password);
+    await _storage.write(key: 'isLoggedIn', value: 'true');
+
+    Navigator.pushNamed(context, AppRoutes.home);
+  }
 
   void _navigateToHome(BuildContext context) {
     Navigator.pushNamed(context, AppRoutes.home);
   }
-  void _navigateToCart(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.cart);
+
+  void _navigateToLogin(BuildContext context) {
+    Navigator.pushNamed(context, AppRoutes.login);
   }
 
   @override
@@ -53,8 +85,9 @@ class SignUp extends StatelessWidget {
                         style: TextStyle(fontSize: 12, color: Colors.black),
                       ),
                     ),
-                    const TextField(
-                      decoration: InputDecoration(
+                    TextField(
+                      onChanged: (value) => _name = value,
+                      decoration: const InputDecoration(
                         labelText: 'Full Name',
                         filled: true,
                         fillColor: Color(0xFFF9F9FA),
@@ -76,7 +109,8 @@ class SignUp extends StatelessWidget {
                         style: TextStyle(fontSize: 12, color: Colors.black),
                       ),
                     ),
-                    const TextField(
+                    TextField(
+                      onChanged: (value) => _email = value,
                       decoration: InputDecoration(
                         labelText: 'E-Mail',
                         filled: true,
@@ -96,6 +130,7 @@ class SignUp extends StatelessWidget {
                       ),
                     ),
                     TextField(
+                      onChanged: (value) => _password = value,
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'Password',
@@ -111,12 +146,15 @@ class SignUp extends StatelessWidget {
 
                     AuthConfirmation(
                       buttonText: "Sign Up",
-                      onButtonPressed: () => _navigateToHome(context),
+                      option: "Or Sign Up with",
+                      onButtonPressed: () {
+                         _saveUserData();
+                      },
                       onGooglePressed: () => (){},
-                      onFacebookPressed: () => _navigateToCart(context),
+                      onFacebookPressed: () {},
                       bottomText: "Already have an account? ",
                       actionText: "Login",
-                      onActionTap: () {},
+                      onActionTap: () => _navigateToLogin(context),
                     ),
                   ],
                 ),

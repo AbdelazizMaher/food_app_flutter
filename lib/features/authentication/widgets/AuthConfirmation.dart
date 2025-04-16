@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class AuthConfirmation extends StatelessWidget {
   final String buttonText;
+  final String option;
   final VoidCallback onButtonPressed;
   final VoidCallback onGooglePressed;
   final VoidCallback onFacebookPressed;
@@ -12,6 +13,7 @@ class AuthConfirmation extends StatelessWidget {
   const AuthConfirmation({
     super.key,
     required this.buttonText,
+    required this.option,
     required this.onButtonPressed,
     required this.onGooglePressed,
     required this.onFacebookPressed,
@@ -44,8 +46,8 @@ class AuthConfirmation extends StatelessWidget {
 
         const SizedBox(height: 20),
 
-        const Text(
-          "Or Sign up with",
+        Text(
+          option,
           style: TextStyle(color: Colors.grey),
         ),
 

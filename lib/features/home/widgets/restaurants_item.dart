@@ -20,7 +20,7 @@ class RestaurantsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 300,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),

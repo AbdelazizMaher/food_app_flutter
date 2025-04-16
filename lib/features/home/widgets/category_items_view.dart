@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_app_lab/models/meal_model.dart';
 
-import '../../../models/category_model.dart';
-import '../../../services/network_service.dart';
+import '../cubits/category_cubit.dart';
+import '../cubits/special_offer_cubit.dart';
 import 'category_item.dart';
 
 class CategoryListView extends StatefulWidget {
-  final Function(Future<List<MealDetails>?>? meals) onCategorySelected;
+  final Function(String category) onCategorySelected;
   const CategoryListView({super.key, required this.onCategorySelected});
 
   @override
@@ -14,41 +15,44 @@ class CategoryListView extends StatefulWidget {
 }
 
 class _CategoryListViewState extends State<CategoryListView> {
-  late Future<List<Categories>?>? categories;
-  late Future<List<MealDetails>?>? meals;
   String selectedCategory = "Beef";
 
 
   @override
   void initState() {
     super.initState();
-    categories = MealsService.getCategories();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(future: categories,
-        builder: (context, snapshot){
-            if (snapshot.hasData) {
-              return Container(
-                height: 120,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data?.length,
-                    itemBuilder: (context, index) {
-                      final category = snapshot.data![index];
-                      return CategoryItem(category: category, onTap: () {
-                        setState(() {selectedCategory = category.strCategory ?? "Beef";});
-                        meals = MealsService.getMealsByCategory(snapshot.data![index].strCategory ?? "Beef");
-                        widget.onCategorySelected(meals);
-                      }, isSelected: selectedCategory == category.strCategory,);
-                    }),
-              );
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
-        });
+    return BlocBuilder<CategoryCubit, CategoryState>(
+      builder: (context, state) {
+        switch (state) {
+          case CategoryInitial():
+            return Center(child: CircularProgressIndicator());
+          case CategoryLoading():
+            return Center(child: CircularProgressIndicator());
+          case CategoryLoaded():
+            return  Container(
+              height: 120,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: state.categories?.length,
+                  itemBuilder: (context, index) {
+                    final category = state.categories![index];
+                    return CategoryItem(category: category, onTap: () {
+                      setState(() {selectedCategory = category.strCategory ?? "Beef";});
+                      context.read<SpecialOfferCubit>().getMealsByCategory(selectedCategory);
+                      widget.onCategorySelected(selectedCategory);
+                    }, isSelected: selectedCategory == category.strCategory,);
+                  }),
+            );
+          case CategoryError():
+            return Center(child: Text(state.message));
+        }
 
+      }
+    );
   }
 }
 

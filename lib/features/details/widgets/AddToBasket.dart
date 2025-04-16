@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AddToBasketWidget extends StatefulWidget {
-  const AddToBasketWidget({super.key});
+  final void Function(int quantity, double totalPrice) onAddToBasket;
+  const AddToBasketWidget({super.key, required this.onAddToBasket});
 
   @override
   State<AddToBasketWidget> createState() => _AddToBasketWidgetState();
@@ -75,14 +76,7 @@ class _AddToBasketWidgetState extends State<AddToBasketWidget> {
                 height: 60,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        behavior: SnackBarBehavior.floating,
-                        content: Text("$quantity added to basket"),
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
+                    widget.onAddToBasket(quantity, totalPrice);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.redAccent,

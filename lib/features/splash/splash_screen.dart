@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../utils/navigation/app_routes.dart';
 
@@ -12,11 +13,19 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
+  FlutterSecureStorage storage = const FlutterSecureStorage();
+
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration(seconds: 3), () {
-      Navigator.pushNamed(context, AppRoutes.onBoarding01);
+      storage.read(key: 'isLoggedIn').then((value) {
+        if (value == 'true') {
+          Navigator.pushNamed(context, AppRoutes.home);
+        } else {
+            Navigator.pushNamed(context, AppRoutes.onBoarding01);
+        }
+      });
     });
   }
 

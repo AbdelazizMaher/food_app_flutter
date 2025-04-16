@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:food_app_lab/features/cart/widgets/cart_bottom_bar.dart';
 import 'package:food_app_lab/features/cart/widgets/cart_item.dart';
-
+import 'package:food_app_lab/features/cart/widgets/cart_item_view.dart';
 import '../details/widgets/promo_code.dart';
 import 'widgets/cart_summary.dart';
 
 class Cart extends StatelessWidget {
-  const Cart({super.key});
+  final String user;
+  const Cart({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -45,25 +46,7 @@ class Cart extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                CartItem(
-                  title: 'Pizza margarita European',
-                  imagePath: 'assets/images/cart_pizza.png',
-                  price: 9.00,
-                  quantity: 2,
-                  onRemove: () {},
-                  onIncrease: () {},
-                  onDecrease: () {},
-                ),
-                const SizedBox(height: 12),
-                CartItem(
-                  title: 'Spaghetti with shrimp and basil',
-                  imagePath: 'assets/images/cart_spaghetti.png',
-                  price: 15.30,
-                  quantity: 2,
-                  onRemove: () {},
-                  onIncrease: () {},
-                  onDecrease: () {},
-                ),
+                CartItemListView(user: user),
                 const SizedBox(height: 16),
                 PromoCode(),
                 const SizedBox(height: 24),

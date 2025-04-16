@@ -3,8 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:food_app_lab/models/meal_model.dart';
 
-import '../../../services/network_service.dart';
-
 class SpecialOfferItem extends StatefulWidget {
   final MealDetails meals;
   final double rating;
@@ -30,7 +28,7 @@ class _SpecialOfferItemState extends State<SpecialOfferItem> {
   @override
   void initState() {
     super.initState();
-    _color = getRandomColor();
+    _color = getRandomColor(widget.meals.strMeal ?? "default");
   }
   @override
   Widget build(BuildContext context) {
@@ -42,12 +40,13 @@ class _SpecialOfferItemState extends State<SpecialOfferItem> {
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: _color,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(36),
+          border: Border.all(color: darkenColor(_color, 0.2), width: 2),
         ),
         child: Row(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(36),
               child: Image.network(
                 widget.meals.strMealThumb ?? "",
                 width: 100,
@@ -131,14 +130,30 @@ class _SpecialOfferItemState extends State<SpecialOfferItem> {
     );
   }
 
-  Color getRandomColor() {
+  Color getRandomColor(String mealName) {
     final List<Color> colors = [
       Color(0xFFFF6B4D),
       Color(0xFF4D91FF),
       Color(0xFF50C878),
       Color(0xFFFFA500),
       Color(0xFF8A2BE2),
+      Color(0xFFFFC107),
+      Color(0xFFDB7093),
+      Color(0xFFFF69B4),
+      Color(0xFFA0522D),
+      Color(0xFFCD853F),
+      Color(0xFFFF6347),
+      Color(0xFF32CD32),
     ];
-    return colors[Random().nextInt(colors.length)];
+
+    final hash = mealName.codeUnits.fold(0, (prev, element) => prev + element);
+    return colors[hash % colors.length];
   }
+
+  Color darkenColor(Color color, double amount) {
+    final hsl = HSLColor.fromColor(color);
+    final hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
+    return hslDark.toColor();
+  }
+
 }
